@@ -53,7 +53,7 @@ export class PasswordNode {
         var sourceHandles: number = 1;
         var targetHandles: number = 1;
         if (this.checkIfLeaf()){
-            targetHandles = 0; // Leaf nodes have no target handles
+            targetHandles = 0; // Leaf nodes have no target handles  export let passwordNode: PasswordNode = data.passwordNode;
         }
         if (this.checkIfRoot()){
             sourceHandles = 0; // Root nodes have no source handles
@@ -62,7 +62,7 @@ export class PasswordNode {
             id: this.value,
             type: 'passwordNode',
             position: { x: 0, y: 0 },
-            data: { label: this.label, "sourceHandles": sourceHandles, "targetHandles": targetHandles },
+            data: { label: this.label, "sourceHandles": sourceHandles, "targetHandles": targetHandles, "passwordNode": this },
             // style: { backgroundColor: this.color }
         };
     }

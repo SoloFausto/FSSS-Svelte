@@ -1,9 +1,9 @@
 <script lang="ts">
   import '@xyflow/svelte/dist/style.css';
   import { Position, useSvelteFlow, type NodeProps } from '@xyflow/svelte';
+  import { PasswordNode } from '$lib/paswordNode';
   import { Handle } from '@xyflow/svelte';
   let { id, data }: NodeProps = $props();
- 
   let { updateNodeData } = useSvelteFlow();
 </script>
 <div class="password-node" >

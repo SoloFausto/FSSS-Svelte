@@ -8,6 +8,7 @@
     import Dropdown from '$lib/SvelteFlowLib/dropdown.svelte';
     import Sheet from '$lib/SvelteFlowLib/sheet.svelte';
 
+
     const nodeTypes = {passwordNode: PasswordNodeElement };
     var darkMode: boolean = $state(true);
     var rootPasswordNode: PasswordNode = $state(new PasswordNode("root",null));
@@ -42,6 +43,9 @@
     }
 
 
+
+
+
 </script>
 
 
@@ -51,15 +55,16 @@
         <p>Export</p>
         <button><img src="" alt=""></button>
     </div> -->
+    
     <div id="canvas" style:width="100vw" style:height="100vh">
         <SvelteFlow 
         nodes={graphNodes} 
         edges={graphEdges} 
         fitView 
+
+        ondelete={reRenderGraph}
         nodesDraggable={false}
         nodesConnectable={false}
-        ondelete={reRenderGraph}
-
         {nodeTypes}
         >
             <Background variant={BackgroundVariant.Dots} />
@@ -67,8 +72,9 @@
                 <Dropdown/>
             </Panel>
             <Panel position="top-right">
-                <Sheet />
+                <Sheet reRender={reRenderGraph} />
             </Panel>
         </SvelteFlow>
     </div>
+            <!--  -->
 </div>
