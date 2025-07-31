@@ -2,6 +2,7 @@
  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
  import { Button } from "$lib/components/ui/button/index.js";
  import logo from "$lib/img/favicon.svg";
+ let {darkMode, masterPassword = $bindable(""),} = $props();
 </script>
  
 <DropdownMenu.Root>
@@ -11,50 +12,30 @@
   {/snippet}
  </DropdownMenu.Trigger>
  <DropdownMenu.Content class="w-56" align="start">
-  <DropdownMenu.Label>My Account</DropdownMenu.Label>
+  <DropdownMenu.Label>Settings</DropdownMenu.Label>
   <DropdownMenu.Group>
-   <DropdownMenu.Item>
-    Profile
-    <DropdownMenu.Shortcut>⇧⌘P</DropdownMenu.Shortcut>
-   </DropdownMenu.Item>
-   <DropdownMenu.Item>
-    Billing
-    <DropdownMenu.Shortcut>⌘B</DropdownMenu.Shortcut>
-   </DropdownMenu.Item>
-   <DropdownMenu.Item>
-    Settings
-    <DropdownMenu.Shortcut>⌘S</DropdownMenu.Shortcut>
-   </DropdownMenu.Item>
-   <DropdownMenu.Item>
-    Keyboard shortcuts
-    <DropdownMenu.Shortcut>⌘K</DropdownMenu.Shortcut>
-   </DropdownMenu.Item>
-  </DropdownMenu.Group>
-  <DropdownMenu.Separator />
-  <DropdownMenu.Group>
-   <DropdownMenu.Item>Team</DropdownMenu.Item>
    <DropdownMenu.Sub>
-    <DropdownMenu.SubTrigger>Invite users</DropdownMenu.SubTrigger>
+    <DropdownMenu.SubTrigger>Enter Master Password</DropdownMenu.SubTrigger>
     <DropdownMenu.SubContent>
-     <DropdownMenu.Item>Email</DropdownMenu.Item>
-     <DropdownMenu.Item>Message</DropdownMenu.Item>
-     <DropdownMenu.Separator />
-     <DropdownMenu.Item>More...</DropdownMenu.Item>
+     <input type="text" name="masterPassword" placeholder="Enter Master Password here..." bind:value={masterPassword}>
     </DropdownMenu.SubContent>
    </DropdownMenu.Sub>
    <DropdownMenu.Item>
-    New Team
-    <DropdownMenu.Shortcut>⌘+T</DropdownMenu.Shortcut>
+    Export Graph Schema
+    <!-- <DropdownMenu.Shortcut>⌘B</DropdownMenu.Shortcut> -->
+   </DropdownMenu.Item>
+   <DropdownMenu.Item>
+    Show tutorial
+    <DropdownMenu.Shortcut>⌘S</DropdownMenu.Shortcut>
+   </DropdownMenu.Item>
+   <DropdownMenu.Item>
+    Share FSSS
+    <DropdownMenu.Shortcut>⌘K</DropdownMenu.Shortcut>
+   </DropdownMenu.Item>
+   <DropdownMenu.Item>
+    {darkMode ? "Disable Dark Mode" : "Enable Dark Mode"}
+    <DropdownMenu.Shortcut>⌘K</DropdownMenu.Shortcut>
    </DropdownMenu.Item>
   </DropdownMenu.Group>
-  <DropdownMenu.Separator />
-  <DropdownMenu.Item>GitHub</DropdownMenu.Item>
-  <DropdownMenu.Item>Support</DropdownMenu.Item>
-  <DropdownMenu.Item disabled>API</DropdownMenu.Item>
-  <DropdownMenu.Separator />
-  <DropdownMenu.Item>
-   Log out
-   <DropdownMenu.Shortcut>⇧⌘Q</DropdownMenu.Shortcut>
-  </DropdownMenu.Item>
  </DropdownMenu.Content>
 </DropdownMenu.Root>

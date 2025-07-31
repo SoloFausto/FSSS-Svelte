@@ -6,7 +6,7 @@
   let { id, data }: NodeProps = $props();
   let { updateNodeData } = useSvelteFlow();
 </script>
-<div class="password-node" >
+<div class="password-node"  >
   {#if data.sourceHandles == 1}
     <Handle type="target" position={Position.Top} />
   {/if}

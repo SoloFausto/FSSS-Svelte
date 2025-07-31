@@ -38,7 +38,7 @@ export class PasswordNode {
         this.label = label;
     }
     calculateHash(masterPassword:string): string {
-        let concatenatedString: string = "";
+        let concatenatedString: string = this.value;
         let currparent: PasswordNode | null = this.parent;
         while (currparent !== null) {
             concatenatedString = currparent.value + concatenatedString;
