@@ -1,0 +1,17 @@
+{
+  "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+  "overrides": [
+    {
+      "files": "*.svelte",
+      "options": {
+        "parser": "svelte",
+        "singleQuote": true,
+        "useTabs": true,
+        "proseWrap": "never",
+        "objectWrap": "collapse",
+        "printWidth": 999,
+        "bracketSameLine": false
+      }
+    }
+  ]
+}
