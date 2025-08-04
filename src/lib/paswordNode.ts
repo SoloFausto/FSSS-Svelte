@@ -2,22 +2,13 @@ import {hash} from '$lib/passwordHasher';
 import {type Edge, type Node,type Position} from '@xyflow/svelte';
 export type HandleType = 'source' | 'target';
 
-
-type NodeHandle = {
-    width?: number | undefined;
-    height?: number | undefined;
-    id?: string | null | undefined;
-    x: number;
-    y: number;
-    position: Position;
-    type: HandleType;
-}
-
 export class PasswordNode {
     value: string;
     children: PasswordNode[];
     color: string = "rgba(0, 0, 0)"; 
     label: string = ""; 
+    seed: number = 0;
+
     parent: PasswordNode | null;
     
     constructor(value: string, parent: PasswordNode | null) {
@@ -26,11 +17,31 @@ export class PasswordNode {
         this.children = [];
         this.parent = parent;
     }
+    static fromJSON(data: any): PasswordNode {
+        const node = new PasswordNode(data.value, null);
+        node.label = data.label;
+        node.color = data.color;
+        for (const childData of data.children) {
+            PasswordNode.fromJSON(childData);
+            const child = PasswordNode.fromJSON(childData);
+            node.addChild(child);
+            child.parent = node;
+        }
+        return node;
+    }
 
     addChild(child: PasswordNode) {
         child.parent = this; // Set the parent of the child node
         this.children.push(child);
     }
+    removeChild(child: PasswordNode) {
+        const index = this.children.indexOf(child);
+        if (index > -1) {
+            this.children.splice(index, 1);
+            child.parent = null; // Clear the parent reference
+        }
+    }
+
     setColor(color: string) {
         this.color = color;
     }

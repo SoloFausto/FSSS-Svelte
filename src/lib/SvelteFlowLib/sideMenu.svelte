@@ -26,6 +26,12 @@
             reRender();
         }
     }
+    function removeNode(node: PasswordNode) {
+        if (node.parent) {
+            node.parent.removeChild(node);
+        }
+        reRender();
+    }
 
 let childNodeName = $state("");
 let creatingChild = $state(false);
@@ -164,7 +170,12 @@ let creatingChild = $state(false);
                         Create Child
                     </button>
                     {/if}
-                    
+                    <button
+                        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        onclick={() => removeNode(selectedNode!)}
+                    >
+                        Remove Node
+                    </button>
                 </div>
 
                 <div class="mb-8">

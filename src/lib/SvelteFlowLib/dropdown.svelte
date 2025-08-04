@@ -2,7 +2,7 @@
  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
  import { Button } from "$lib/components/ui/button/index.js";
  import logo from "$lib/img/favicon.svg";
- let {darkMode, masterPassword = $bindable(""),} = $props();
+ let {darkMode, masterPassword = $bindable(""), exportSchema,importSchemaFile = $bindable()} = $props();
 </script>
  
 <DropdownMenu.Root>
@@ -20,11 +20,13 @@
      <input type="text" name="masterPassword" placeholder="Enter Master Password here..." bind:value={masterPassword}>
     </DropdownMenu.SubContent>
    </DropdownMenu.Sub>
-   <DropdownMenu.Item>
-    Export Graph Schema
-    <!-- <DropdownMenu.Shortcut>⌘B</DropdownMenu.Shortcut> -->
+   <DropdownMenu.Item >
+        <button onclick={exportSchema}>Export Graph Schema</button>
    </DropdownMenu.Item>
-   <DropdownMenu.Item>
+      <DropdownMenu.Item >
+        <input accept=".json" bind:files={importSchemaFile} type="file" />
+   </DropdownMenu.Item>
+   <DropdownMenu.Item> 
     Show tutorial
     <DropdownMenu.Shortcut>⌘S</DropdownMenu.Shortcut>
    </DropdownMenu.Item>

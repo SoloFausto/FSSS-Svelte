@@ -21,18 +21,14 @@
     var masterPassword: string = $state("");
 
     var rootPasswordNode: PasswordNode = $state(new PasswordNode("root", null));
-
-    rootPasswordNode.addChild(new PasswordNode("child1", rootPasswordNode));
-    rootPasswordNode.addChild(new PasswordNode("child2", rootPasswordNode));
-    rootPasswordNode.children[0].addChild(
-        new PasswordNode("child1.1", rootPasswordNode.children[0]),
-    );
+    var inputSchemaFile: FileList | null = $state(null);
 
 
     var graphNodes: any[] = $state([]);
     var graphEdges: any[] = $state([]);
-    let rawNodes: Node[] = rootPasswordNode.childrenToNodes();
-    let rawEdges: Edge[] = rootPasswordNode.childrenToEdges();
+    let rawNodes: Node[] = new Array();
+    let rawEdges: Edge[] = new Array();
+    reRenderGraph();
 
     $effect(() => {
         ({ nodes: graphNodes, edges: graphEdges } = getLayoutedElements(
@@ -56,7 +52,45 @@
         ));
     }
     function exportSchema(){
-
+        const schemaJSON = JSON.stringify(rootPasswordNode, getCircularReplacer());
+        const blob = new Blob([schemaJSON], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "graph-schema.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    $effect(() => {
+        console.log("processing inputSchemaFile");
+        if (inputSchemaFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target?.result as string);
+                    rootPasswordNode = PasswordNode.fromJSON(data);
+                    reRenderGraph();
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                }
+            };
+            reader.readAsText(inputSchemaFile[0]);
+            inputSchemaFile = null;
+        }
+    });
+    function getCircularReplacer() {
+        const seen = new WeakSet();
+        return (key : any, value : any) => {
+        if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+                return;
+            }
+            seen.add(value);
+        }
+            return value;
+        };
     }
     function showTutorial(){
 
@@ -65,12 +99,6 @@
 </script>
 
 <div>
-    <!-- <div>
-        <p>Master Password</p>
-        <p>Export</p>
-        <button><img src="" alt=""></button>
-    </div> -->
-
     <div id="canvas" style:width="100vw" style:height="100vh">
         <SvelteFlow
             nodes={graphNodes}
@@ -83,7 +111,7 @@
         >
             <Background variant={BackgroundVariant.Dots} />
             <Panel position="top-left">
-                <Dropdown darkMode={darkMode} bind:masterPassword={masterPassword} />
+                <Dropdown darkMode={darkMode} bind:masterPassword={masterPassword} exportSchema={exportSchema} bind:importSchemaFile={inputSchemaFile} />
             </Panel>
             <Panel position="top-right">
                 <SideMenu reRender={reRenderGraph} masterPassword={masterPassword} />
