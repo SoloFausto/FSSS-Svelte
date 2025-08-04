@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { PasswordNode } from '$lib/paswordNode';
-	import type { Node } from '@xyflow/svelte';
 	import PasswordNodeElement from './passwordNodeElement.svelte';
 	import { useOnSelectionChange } from '@xyflow/svelte';
+	import CharacterSetDropdown from './characterSetDropdown.svelte';
 
 	let { masterPassword, reRender } = $props();
 
@@ -32,9 +32,25 @@
 		}
 		reRender();
 	}
+	function nodeHashRefresh() {
+		if (!selectedNode) return;
+		currentHash = selectedNode.calculateHash(masterPassword);
+	}
 
 	let childNodeName = $state('');
 	let creatingChild = $state(false);
+
+	let seedValue: number = $state(0);
+	$effect(() => {
+		if (selectedNode) {
+			if (isNaN(seedValue) || seedValue === null || seedValue < 0) {
+				seedValue = 0;
+			} else {
+				selectedNode.setSeed(seedValue);
+			}
+			nodeHashRefresh();
+		}
+	});
 </script>
 
 <!-- Sidebar overlay -->
@@ -64,11 +80,23 @@
 							</button>
 						</form>
 					</div>
-				</div>
-				<div class="mb-3 flex items-center gap-2">
-					<span class="min-w-[100px] font-medium text-gray-600 dark:text-gray-400">Color:</span>
-					<div class="h-5 w-5 rounded border border-gray-200 dark:border-gray-600" style="background-color: {selectedNode.color}"></div>
-					<span class="font-mono text-gray-900 dark:text-gray-100">{selectedNode.color}</span>
+					<div class="mb-3 flex items-center gap-2">
+						<span class="min-w-[100px] font-medium text-gray-600 dark:text-gray-400">Color:</span>
+						<input type="color" id="nodeColor" name="NodeColor" bind:value={selectedNode.color} />
+						<span class="font-mono text-gray-900 dark:text-gray-100">{selectedNode.color}</span>
+					</div>
+					<div class="mb-3 flex items-center gap-2">
+						<span class="min-w-[100px] font-medium text-gray-600 dark:text-gray-400">Character Set:</span>
+						<span class="font-mono text-gray-900 dark:text-gray-100"><CharacterSetDropdown /></span>
+					</div>
+					<div class="mb-3 flex items-center gap-2">
+						<span class="min-w-[100px] font-medium text-gray-600 dark:text-gray-400">Seed:</span>
+						<input type="number" min="0" id="nodeSeed" name="NodeSeed" placeholder="0" bind:value={seedValue} oninput={() => nodeHashRefresh()} class="rounded border border-gray-300 bg-transparent px-2 py-1 font-mono text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:text-gray-100" />
+					</div>
+					<div class="mb-3 flex items-center gap-2">
+						<span class="min-w-[100px] font-medium text-gray-600 dark:text-gray-400">Length:</span>
+						<input type="number" min="1" id="nodeLength" name="NodeLength" bind:value={selectedNode.length} oninput={() => nodeHashRefresh()} class="rounded border border-gray-300 bg-transparent px-2 py-1 font-mono text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:text-gray-100" />
+					</div>
 				</div>
 
 				<div class="mb-8">

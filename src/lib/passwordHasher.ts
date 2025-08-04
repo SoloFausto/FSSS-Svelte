@@ -1,31 +1,24 @@
 import { SHA3 } from "sha3";
 import seedrandom from "seedrandom";
-
-const DEFAULT_CHARACTER_SET: string =
-  "ABCDFGHIJKLMNOPQRSTUVWXYZabdfghijklmnopqrstuvwxyz1234567890";
-const UPDATED_CHARACTER_SET: string =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890*!#$&_@%";
-const DEFAULT_LENGTH: number = 32;
-
-export function hash(masterPassword: string, servicePassword: string) {
+export enum characterSet{
+  LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  LETTERS_AND_NUMBERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890",
+  LETTERS_NUMBERS_AND_SPECIAL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#%*()_+:;?/,.",
+}
+export function hash(masterPassword: string, servicePassword: string, characterSet: characterSet, length: number, seed: number): string {
   if (masterPassword === "" || servicePassword === "") {
     return "";
   }
   let generatedPassword: string = "";
   const hash = new SHA3(512);
   var hashValue = hash
-    .update(masterPassword + hash.update(servicePassword))
+    .update(masterPassword + hash.update(servicePassword) + seed)
     .digest("hex");
   var rng = seedrandom(hashValue);
-  for (var i = 0; i < DEFAULT_LENGTH; i++) {
+  for (var i = 0; i < length; i++) {
     generatedPassword +=
-      UPDATED_CHARACTER_SET[Math.floor(rng() * UPDATED_CHARACTER_SET.length)];
+      characterSet[Math.floor(rng() * characterSet.length)];
   }
   return generatedPassword;
 }
 
-export function processInputPassword(inputPassword: string) {
-  if (inputPassword === "") {
-    return "";
-  }
-}

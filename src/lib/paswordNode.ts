@@ -1,5 +1,7 @@
 import { hash } from "$lib/passwordHasher";
 import { type Edge, type Node, type Position } from "@xyflow/svelte";
+import { characterSet } from "$lib/passwordHasher";
+
 export type HandleType = "source" | "target";
 
 export class PasswordNode {
@@ -8,7 +10,8 @@ export class PasswordNode {
   color: string = "rgba(0, 0, 0)";
   label: string = "";
   seed: number = 0;
-
+  characterSet: characterSet = characterSet.LETTERS_NUMBERS_AND_SPECIAL;
+  length: number = 32;
   parent: PasswordNode | null;
 
   constructor(value: string, parent: PasswordNode | null) {
@@ -21,6 +24,9 @@ export class PasswordNode {
     const node = new PasswordNode(data.value, null);
     node.label = data.label;
     node.color = data.color;
+    node.seed = data.seed;
+    node.characterSet = data.characterSet;
+    node.length = data.length;
     for (const childData of data.children) {
       PasswordNode.fromJSON(childData);
       const child = PasswordNode.fromJSON(childData);
@@ -48,6 +54,12 @@ export class PasswordNode {
   setLabel(label: string) {
     this.label = label;
   }
+  setSeed(seed: number) {
+    this.seed = seed;
+    if (seed < 0) {
+      this.seed = 0;
+    }
+  }
   calculateHash(masterPassword: string): string {
     let concatenatedString: string = this.value;
     let currparent: PasswordNode | null = this.parent;
@@ -55,7 +67,7 @@ export class PasswordNode {
       concatenatedString = currparent.value + concatenatedString;
       currparent = currparent.parent;
     }
-    let createdHash: string = hash(masterPassword, concatenatedString);
+    let createdHash: string = hash(masterPassword, concatenatedString, this.characterSet, this.length, this.seed);
 
     return createdHash;
   }

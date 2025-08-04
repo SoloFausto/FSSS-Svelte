@@ -1,11 +1,11 @@
 <script lang="ts">
 	import '@xyflow/svelte/dist/style.css';
 	import { PasswordNode } from '$lib/paswordNode';
-	import PasswordNodeElement from '$lib/SvelteFlowLib/passwordNodeElement.svelte';
+	import PasswordNodeElement from '$lib/UIElements/passwordNodeElement.svelte';
 	import { SvelteFlow, Background, Panel, BackgroundVariant, type Edge, type Node } from '@xyflow/svelte';
 	import { getLayoutedElements } from '$lib/dagre/dagreLayout';
-	import Dropdown from '$lib/SvelteFlowLib/dropdown.svelte';
-	import SideMenu from '$lib/SvelteFlowLib/sideMenu.svelte';
+	import Dropdown from '$lib/UIElements/dropdown.svelte';
+	import SideMenu from '$lib/UIElements/sideMenu.svelte';
 
 	const nodeTypes = { passwordNode: PasswordNodeElement };
 	var darkMode: boolean = $state(true);
