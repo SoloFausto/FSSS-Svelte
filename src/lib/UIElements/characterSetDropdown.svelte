@@ -6,26 +6,15 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils.js';
-	import { characterSet } from '$lib/passwordHasher';
-
-	interface CharacterSetOption {
-		label: string;
-		value: string;
-	}
-
-	function stringEnumToArray(enumObject: object): CharacterSetOption[] {
-		return Object.keys(enumObject).map((key) => {
-			return { label: key, value: enumObject[key as keyof typeof enumObject] as string };
-		});
-	}
-	const characterSetOptions = stringEnumToArray(characterSet);
+	import { characterSetChoices } from '$lib/passwordHasher';
 
 	let open = $state(false);
-	let value = $state(null);
+	let { selection = $bindable(), nodeHashRefresh } = $props();
 	let triggerRef = $state<HTMLButtonElement>(null!);
-
-	const selectedValue = $derived(characterSetOptions.find((f) => f.value === value)?.value);
-
+	let selectedValue: string | null = $state(null);
+	$effect(() => {
+		selectedValue = selection ? selection.label : null;
+	});
 	// We want to refocus the trigger button when the user selects
 	// an item from the list so users can continue navigating the
 	// rest of the form with the keyboard.
@@ -41,7 +30,7 @@
 	<Popover.Trigger bind:ref={triggerRef}>
 		{#snippet child({ props })}
 			<Button variant="outline" class="w-[200px] justify-between" {...props} role="combobox" aria-expanded={open}>
-				{selectedValue || 'Select a char set'}
+				{selectedValue || 'Select a framework...'}
 				<ChevronsUpDownIcon class="ml-2 size-4 shrink-0 opacity-50" />
 			</Button>
 		{/snippet}
@@ -49,19 +38,21 @@
 	<Popover.Content class="w-[200px] p-0">
 		<Command.Root>
 			<Command.List>
-				<Command.Empty>No char set found.</Command.Empty>
+				<Command.Empty>No framework found.</Command.Empty>
 				<Command.Group>
-					{#each characterSetOptions as characterSet}
+					{#each characterSetChoices as choice}
 						<Command.Item
-							value={characterSet.value}
+							value={choice.value}
 							onSelect={() => {
-								value = characterSet.value;
-								console.log('Selected character set:', value);
+								selectedValue = choice.label;
+								selection = choice;
+								console.log('selected character set:', selectedValue);
+								nodeHashRefresh();
 								closeAndFocusTrigger();
 							}}
 						>
-							<CheckIcon class={cn('mr-2 size-4', value !== characterSet.value && 'text-transparent')} />
-							{characterSet.label}
+							<CheckIcon class={cn('mr-2 size-4', selectedValue !== choice.value && 'text-transparent')} />
+							{choice.label}
 						</Command.Item>
 					{/each}
 				</Command.Group>

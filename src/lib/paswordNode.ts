@@ -1,6 +1,7 @@
 import { hash } from "$lib/passwordHasher";
 import { type Edge, type Node, type Position } from "@xyflow/svelte";
-import { characterSet } from "$lib/passwordHasher";
+import { type CharacterSetOption, characterSetChoices } from '$lib/passwordHasher';
+
 
 export type HandleType = "source" | "target";
 
@@ -10,7 +11,7 @@ export class PasswordNode {
   color: string = "rgba(0, 0, 0)";
   label: string = "";
   seed: number = 0;
-  characterSet: characterSet = characterSet.LETTERS_NUMBERS_AND_SPECIAL;
+  characterSet: CharacterSetOption;
   length: number = 32;
   parent: PasswordNode | null;
 
@@ -19,6 +20,7 @@ export class PasswordNode {
     this.label = value;
     this.children = [];
     this.parent = parent;
+    this.characterSet = characterSetChoices[2];
   }
   static fromJSON(data: any): PasswordNode {
     const node = new PasswordNode(data.value, null);
@@ -58,6 +60,14 @@ export class PasswordNode {
     this.seed = seed;
     if (seed < 0) {
       this.seed = 0;
+    }
+  }
+  setLength(length: number) {
+    this.length = length;
+    if (length < 1) {
+      this.length = 1;
+    } else if (length > 100) {
+      this.length = 100;
     }
   }
   calculateHash(masterPassword: string): string {
