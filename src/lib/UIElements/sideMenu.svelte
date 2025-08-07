@@ -71,7 +71,7 @@
 			}
 		}
 	});
-	let selectedColor: string | undefined = $state();
+	let selectedColor: string | undefined = $state('#ffffff');
 	$effect(() => {
 		if (selectedNode && selectedColor) {
 			selectedNode.setColor(selectedColor);
@@ -104,10 +104,15 @@
 					</div>
 
 					<div class="mb-2 flex items-center gap-2">
-						<span class="text-muted-foreground text-s w-[80px] font-medium">Color:</span>
+						<span class="text-muted-foreground text-s w-[80px] font-medium">Current Color:</span>
 						<div class="flex flex-1 items-center gap-1.5">
-							<input type="color" id="nodeColor" name="NodeColor" bind:value={selectedColor} class="bg-background h-7 w-12 rounded border" />
-							<span class="text-foreground text-s font-mono">{selectedNode.color}</span>
+							<form onsubmit={() => reRender()} class="flex flex-1 items-center gap-1.5">
+								<input type="color" id="nodeColor" name="NodeColor" bind:value={selectedColor} oninput={() => nodeHashRefresh()} class="bg-background h-7 w-12 rounded border" />
+								<span class="text-foreground text-s font-mono">{selectedNode.color}</span>
+								<Button type="submit" variant="outline" size="sm" aria-label="Update label" class="h-7 w-7 p-0">
+									<img src="save.svg" alt="Save label" class="h-3 w-3" />
+								</Button>
+							</form>
 						</div>
 					</div>
 					<div class="mb-2 flex items-center gap-2">
