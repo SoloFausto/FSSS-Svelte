@@ -2,7 +2,7 @@
 	import '@xyflow/svelte/dist/style.css';
 	import { PasswordNode } from '$lib/paswordNode';
 	import PasswordNodeElement from '$lib/UIElements/passwordNodeElement.svelte';
-	import { SvelteFlow, Background, Panel, BackgroundVariant, type Edge, type Node } from '@xyflow/svelte';
+	import { SvelteFlow, Background, Panel, BackgroundVariant, type Edge, type Node, type ColorMode } from '@xyflow/svelte';
 	import { getLayoutedElements } from '$lib/dagre/dagreLayout';
 	import Dropdown from '$lib/UIElements/dropdown.svelte';
 	import SideMenu from '$lib/UIElements/sideMenu.svelte';
@@ -77,14 +77,16 @@
 		};
 	}
 	function showTutorial() {}
+
+	let colorMode: ColorMode = $state('dark');
 </script>
 
 <div>
 	<div id="canvas" style:width="100vw" style:height="100vh">
-		<SvelteFlow nodes={graphNodes} edges={graphEdges} fitView ondelete={reRenderGraph} nodesDraggable={false} nodesConnectable={false} {nodeTypes}>
+		<SvelteFlow nodes={graphNodes} edges={graphEdges} fitView ondelete={reRenderGraph} nodesDraggable={false} nodesConnectable={false} {nodeTypes} {colorMode}>
 			<Background variant={BackgroundVariant.Dots} />
 			<Panel position="top-left">
-				<Dropdown {darkMode} bind:masterPassword {exportSchema} bind:importSchemaFile={inputSchemaFile} />
+				<Dropdown bind:masterPassword {exportSchema} bind:importSchemaFile={inputSchemaFile} bind:colorMode />
 			</Panel>
 			<Panel position="top-right">
 				<SideMenu reRender={reRenderGraph} {masterPassword} />

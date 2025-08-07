@@ -1,8 +1,13 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import { type ColorMode } from '@xyflow/svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import logo from '$lib/img/favicon.svg';
-	let { darkMode, masterPassword = $bindable(''), exportSchema, importSchemaFile = $bindable() } = $props();
+	let { colorMode = $bindable(), masterPassword = $bindable(''), exportSchema, importSchemaFile = $bindable() } = $props();
+
+	function toggleDarkMode() {
+		colorMode = colorMode === 'dark' ? 'light' : 'dark';
+	}
 </script>
 
 <DropdownMenu.Root>
@@ -35,8 +40,7 @@
 				<DropdownMenu.Shortcut>⌘K</DropdownMenu.Shortcut>
 			</DropdownMenu.Item>
 			<DropdownMenu.Item>
-				{darkMode ? 'Disable Dark Mode' : 'Enable Dark Mode'}
-				<DropdownMenu.Shortcut>⌘K</DropdownMenu.Shortcut>
+				<button onclick={toggleDarkMode}>{colorMode === 'dark' ? 'Disable Dark Mode' : 'Enable Dark Mode'}</button>
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 	</DropdownMenu.Content>

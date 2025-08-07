@@ -1,6 +1,7 @@
 import { hash } from "$lib/passwordHasher";
 import { type Edge, type Node, type Position } from "@xyflow/svelte";
 import { type CharacterSetOption, characterSetChoices } from '$lib/passwordHasher';
+import Color from "colorjs.io";
 
 
 export type HandleType = "source" | "target";
@@ -8,7 +9,9 @@ export type HandleType = "source" | "target";
 export class PasswordNode {
   value: string;
   children: PasswordNode[];
-  color: string = "rgba(0, 0, 0)";
+  color: string;
+  borderColor: string;
+  textColor: string;
   label: string = "";
   seed: number = 0;
   characterSet: CharacterSetOption;
@@ -20,6 +23,9 @@ export class PasswordNode {
     this.label = value;
     this.children = [];
     this.parent = parent;
+    this.color = "rgb(255, 255, 255)";
+    this.borderColor = "rgb(0, 0, 0)";
+    this.textColor  = "rgb(0, 0, 0)";
     this.characterSet = characterSetChoices[2];
   }
   static fromJSON(data: any): PasswordNode {
@@ -51,7 +57,17 @@ export class PasswordNode {
   }
 
   setColor(color: string) {
-    this.color = color;
+    let colorWhite: Color = new Color("white");
+    let colorBlack: Color = new Color("black");
+    let colorNode: Color = new Color(color);
+    let borderColor: Color = colorNode.clone();
+    borderColor.darken(0.2); // Darken the color for the border
+
+    let contrast = colorNode.contrast(colorBlack, "APCA");
+
+    this.color = colorNode.toString({ format: 'rgb' });
+    this.borderColor = borderColor.toString({ format: 'rgb' });
+    this.textColor = contrast > 1.5 ? colorBlack.toString({ format: 'rgb' }) : colorWhite.toString({ format: 'rgb' });
   }
   setLabel(label: string) {
     this.label = label;
@@ -99,6 +115,9 @@ export class PasswordNode {
         sourceHandles: sourceHandles,
         targetHandles: targetHandles,
         passwordNode: this,
+        textColor: this.textColor,
+        color: this.color,
+        borderColor: this.borderColor,
       },
       // style: { backgroundColor: this.color }
     };
