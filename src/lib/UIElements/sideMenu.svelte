@@ -7,6 +7,8 @@
 	import { type CharacterSetOption } from '$lib/passwordHasher';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils.js';
+	import ColorPicker from 'svelte-awesome-color-picker';
+	import { Colord, colord, extend } from 'colord';
 
 	let { masterPassword, reRender } = $props();
 
@@ -25,6 +27,7 @@
 		seedValue = selectedNode ? selectedNode.seed : 0;
 		lengthValue = selectedNode ? selectedNode.length : 32;
 		// selectedCharacterSet = selectedNode ? selectedNode.characterSet : characterSetChoices[0];
+		selectedColor = selectedNode ? selectedNode.color.toHex() : colord('#ffffff').toHex();
 		showHash = false;
 	});
 	let showHash: boolean = $state(false);
@@ -71,10 +74,10 @@
 			}
 		}
 	});
-	let selectedColor: string | undefined = $state('#ffffff');
+	let selectedColor: string = $state('#ffffff');
 	$effect(() => {
 		if (selectedNode && selectedColor) {
-			selectedNode.setColor(selectedColor);
+			selectedNode.setColor(colord(selectedColor));
 		}
 	});
 </script>
@@ -107,8 +110,8 @@
 						<span class="text-muted-foreground text-s w-[80px] font-medium">Current Color:</span>
 						<div class="flex flex-1 items-center gap-1.5">
 							<form onsubmit={() => reRender()} class="flex flex-1 items-center gap-1.5">
-								<input type="color" id="nodeColor" name="NodeColor" bind:value={selectedColor} oninput={() => nodeHashRefresh()} class="bg-background h-7 w-12 rounded border" />
-								<span class="text-foreground text-s font-mono">{selectedNode.color}</span>
+								<ColorPicker bind:hex={selectedColor} position="responsive" />
+								<!-- <span class="text-foreground text-s font-mono">{selectedNode.color.toString()}</span> -->
 								<Button type="submit" variant="outline" size="sm" aria-label="Update label" class="h-7 w-7 p-0">
 									<img src="save.svg" alt="Save label" class="h-3 w-3" />
 								</Button>

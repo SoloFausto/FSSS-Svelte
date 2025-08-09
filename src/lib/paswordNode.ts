@@ -1,17 +1,19 @@
 import { hash } from "$lib/passwordHasher";
 import { type Edge, type Node, type Position } from "@xyflow/svelte";
 import { type CharacterSetOption, characterSetChoices } from '$lib/passwordHasher';
-import Color from "colorjs.io";
+import { Colord, colord, extend } from "colord";
+import a11yPlugin from "colord/plugins/a11y";
 
+extend([a11yPlugin]);
 
 export type HandleType = "source" | "target";
 
 export class PasswordNode {
   value: string;
   children: PasswordNode[];
-  color: string;
-  borderColor: string;
-  textColor: string;
+  color: Colord;
+  borderColor: Colord;
+  textColor: Colord;
   label: string = "";
   seed: number = 0;
   characterSet: CharacterSetOption;
@@ -23,9 +25,9 @@ export class PasswordNode {
     this.label = value;
     this.children = [];
     this.parent = parent;
-    this.color = "rgb(255, 255, 255)";
-    this.borderColor = "rgb(0, 0, 0)";
-    this.textColor  = "rgb(0, 0, 0)";
+    this.color = colord("rgb(255, 255, 255)");
+    this.borderColor = colord("rgb(0, 0, 0)");
+    this.textColor = colord("rgb(0, 0, 0)");
     this.characterSet = characterSetChoices[2];
   }
   static fromJSON(data: any): PasswordNode {
@@ -56,18 +58,10 @@ export class PasswordNode {
     }
   }
 
-  setColor(color: string) {
-    let colorWhite: Color = new Color("white");
-    let colorBlack: Color = new Color("black");
-    let colorNode: Color = new Color(color);
-    let borderColor: Color = colorNode.clone();
-    borderColor.darken(0.2); // Darken the color for the border
-
-    let contrast = colorNode.contrast(colorBlack, "APCA");
-
-    this.color = colorNode.toString({ format: 'rgb' });
-    this.borderColor = borderColor.toString({ format: 'rgb' });
-    this.textColor = contrast > 1.5 ? colorBlack.toString({ format: 'rgb' }) : colorWhite.toString({ format: 'rgb' });
+  setColor(color: Colord) {
+    this.color = color;
+    this.borderColor = color.darken(0.2);
+    this.textColor = color.contrast(colord("black")) > 1.5 ? colord("black") : colord("white");
   }
   setLabel(label: string) {
     this.label = label;
@@ -115,9 +109,9 @@ export class PasswordNode {
         sourceHandles: sourceHandles,
         targetHandles: targetHandles,
         passwordNode: this,
-        textColor: this.textColor,
-        color: this.color,
-        borderColor: this.borderColor,
+        textColor: this.textColor.toHex(),
+        color: this.color.toHex(),
+        borderColor: this.borderColor.toHex(),
       },
       // style: { backgroundColor: this.color }
     };
