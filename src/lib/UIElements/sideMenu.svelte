@@ -1,12 +1,8 @@
 <script lang="ts">
 	import { PasswordNode } from '$lib/paswordNode';
-	import PasswordNodeElement from './passwordNodeElement.svelte';
 	import { useOnSelectionChange } from '@xyflow/svelte';
 	import CharacterSetDropdown from './characterSetDropdown.svelte';
-	import { characterSetChoices } from '$lib/passwordHasher';
-	import { type CharacterSetOption } from '$lib/passwordHasher';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { cn } from '$lib/utils.js';
 	import ColorPicker from 'svelte-awesome-color-picker';
 	import { Colord, colord, extend } from 'colord';
 
@@ -14,6 +10,9 @@
 
 	let selectedNode: PasswordNode | null = $state.raw(null);
 
+	let showHash: boolean = $state(false);
+	let childNodeName = $state('');
+	let creatingChild = $state(false);
 	let currentHash: string = $derived.by(() => {
 		if (selectedNode) {
 			return selectedNode.calculateHash(masterPassword);
@@ -30,7 +29,10 @@
 		selectedColor = selectedNode ? selectedNode.color.toHex() : colord('#ffffff').toHex();
 		showHash = false;
 	});
-	let showHash: boolean = $state(false);
+
+	////////////////////////////
+	// Node Child Creation
+	/////////////////////////////
 	function createNodeChild(value: string) {
 		if (selectedNode && value.trim() !== '') {
 			const newChild = new PasswordNode(value, selectedNode);
@@ -40,20 +42,22 @@
 			reRender();
 		}
 	}
+
 	function removeNode(node: PasswordNode) {
 		if (node.parent) {
 			node.parent.removeChild(node);
 		}
 		reRender();
 	}
+
 	function nodeHashRefresh() {
 		if (!selectedNode) return;
 		currentHash = selectedNode.calculateHash(masterPassword);
 	}
 
-	let childNodeName = $state('');
-	let creatingChild = $state(false);
-
+	///////////////////////////
+	// Node Property setters
+	/////////////////////////
 	let seedValue: number = $state(0);
 	$effect(() => {
 		if (selectedNode) {
@@ -64,6 +68,7 @@
 			}
 		}
 	});
+
 	let lengthValue: number = $state(0);
 	$effect(() => {
 		if (selectedNode) {
@@ -107,11 +112,10 @@
 					</div>
 
 					<div class="mb-2 flex items-center gap-2">
-						<span class="text-muted-foreground text-s w-[80px] font-medium">Current Color:</span>
+						<span class="text-muted-foreground text-s w-[80px] font-medium"></span>
 						<div class="flex flex-1 items-center gap-1.5">
 							<form onsubmit={() => reRender()} class="flex flex-1 items-center gap-1.5">
 								<ColorPicker bind:hex={selectedColor} position="responsive" />
-								<!-- <span class="text-foreground text-s font-mono">{selectedNode.color.toString()}</span> -->
 								<Button type="submit" variant="outline" size="sm" aria-label="Update label" class="h-7 w-7 p-0">
 									<img src="save.svg" alt="Save label" class="h-3 w-3" />
 								</Button>

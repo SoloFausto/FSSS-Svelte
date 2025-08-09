@@ -61,7 +61,11 @@ export class PasswordNode {
   setColor(color: Colord) {
     this.color = color;
     this.borderColor = color.darken(0.2);
-    this.textColor = color.contrast(colord("black")) > 1.5 ? colord("black") : colord("white");
+    if (color.isReadable("#000000")){
+      this.textColor = colord("#000000ff");
+    } else {
+      this.textColor = colord("#ffffffff");
+    }
   }
   setLabel(label: string) {
     this.label = label;
