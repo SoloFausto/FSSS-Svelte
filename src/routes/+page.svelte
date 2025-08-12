@@ -6,6 +6,7 @@
 	import { getLayoutedElements } from '$lib/dagre/dagreLayout';
 	import Dropdown from '$lib/UIElements/dropdown.svelte';
 	import SideMenu from '$lib/UIElements/sideMenu.svelte';
+	import { encryptGraph, decryptGraph, type EncryptedGraph } from '$lib/encryption';
 
 	const nodeTypes = { passwordNode: PasswordNodeElement };
 	var darkMode: boolean = $state(true);
@@ -36,13 +37,18 @@
 		rawEdges = rootPasswordNode.childrenToEdges();
 		({ nodes: graphNodes, edges: graphEdges } = getLayoutedElements(rawNodes, rawEdges));
 	}
-	function exportSchema() {
+	async function exportSchema() {
+		if (!masterPassword) {
+			alert('Please set a master password before exporting the schema.');
+			return;
+		}
 		const schemaJSON = JSON.stringify(rootPasswordNode, getCircularReplacer());
-		const blob = new Blob([schemaJSON], { type: 'application/json' });
+		const encryptedSchemaJson = JSON.stringify(await encryptGraph(rootPasswordNode, masterPassword));
+		const blob = new Blob([encryptedSchemaJson], { type: 'application/json' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = 'graph-schema.json';
+		a.download = 'encrypted-graph-schema.json';
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
@@ -52,13 +58,14 @@
 		console.log('processing inputSchemaFile');
 		if (inputSchemaFile) {
 			const reader = new FileReader();
-			reader.onload = (e) => {
+			reader.onload = async (e) => {
 				try {
-					const data = JSON.parse(e.target?.result as string);
-					rootPasswordNode = PasswordNode.fromJSON(data);
+					const data: EncryptedGraph = JSON.parse(e.target?.result as string);
+					const decryptedData = await decryptGraph(data, masterPassword);
+					rootPasswordNode = PasswordNode.fromJSON(decryptedData);
 					reRenderGraph();
 				} catch (error) {
-					console.error('Error parsing JSON:', error);
+					alert('Error processing input schema file: ');
 				}
 			};
 			reader.readAsText(inputSchemaFile[0]);

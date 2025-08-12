@@ -44,9 +44,9 @@ export class PasswordNode {
   static fromJSON(data: any): PasswordNode {
     const node = new PasswordNode(data.value, null);
     node.label = data.label;
-    node.color = data.color;
-    node.borderColor = data.borderColor;
-    node.textColor = data.textColor;
+    node.color = colord(data.color.parsed);
+    node.borderColor = colord(data.borderColor.parsed);
+    node.textColor = colord(data.textColor.parsed);
     node.seed = data.seed;
     node.characterSet = data.characterSet;
     node.length = data.length;
