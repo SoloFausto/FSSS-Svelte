@@ -30,35 +30,20 @@ enum CharacterSet {
 
 function getCharacterSet(characterSet: CharacterSetOption): string {
   let result = "";
-  if (characterSet.upperAlphanumeric) {
-    result += CharacterSet.UpperAlphanumeric;
-  }
-  if (characterSet.lowerAlphanumeric) {
-    result += CharacterSet.LowerAlphanumeric;
-  }
-  if (characterSet.numbers) {
-    result += CharacterSet.Numbers;
-  }
-  if (characterSet.simpleSpecialCharacters) {
-    result += CharacterSet.SimpleSpecialCharacters;
-  }
-  if (characterSet.punctuationCharacters) {
-    result += CharacterSet.PunctuationCharacters;
-  }
-  if (characterSet.quotations) {
-    result += CharacterSet.Quotations;
-  }
-  if (characterSet.dashes) {
-    result += CharacterSet.Dashes;
-  }
-  if (characterSet.mathSymbols) {
-    result += CharacterSet.MathSymbols;
-  }
-  if (characterSet.braces) {
-    result += CharacterSet.Braces;
-  }
-  if (characterSet.extendedASCII) {
-    result += CharacterSet.ExtendedASCII;
+  const sets: [boolean, string][] = [
+    [characterSet.upperAlphanumeric, CharacterSet.UpperAlphanumeric],
+    [characterSet.lowerAlphanumeric, CharacterSet.LowerAlphanumeric],
+    [characterSet.numbers, CharacterSet.Numbers],
+    [characterSet.simpleSpecialCharacters, CharacterSet.SimpleSpecialCharacters],
+    [characterSet.punctuationCharacters, CharacterSet.PunctuationCharacters],
+    [characterSet.quotations, CharacterSet.Quotations],
+    [characterSet.dashes, CharacterSet.Dashes],
+    [characterSet.mathSymbols, CharacterSet.MathSymbols],
+    [characterSet.braces, CharacterSet.Braces],
+    [characterSet.extendedASCII, CharacterSet.ExtendedASCII],
+  ];
+  for (const [enabled, chars] of sets) {
+    if (enabled) result += chars;
   }
   if (result === "") {
     console.warn("No character set selected");
