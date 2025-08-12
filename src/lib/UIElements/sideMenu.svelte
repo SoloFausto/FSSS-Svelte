@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { PasswordNode } from '$lib/paswordNode';
-	import { useOnSelectionChange } from '@xyflow/svelte';
+	import { useOnSelectionChange, useSvelteFlow } from '@xyflow/svelte';
 	import CharacterSetDropdown from './characterSetDropdown.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import ColorPicker from 'svelte-awesome-color-picker';
 	import { Colord, colord, extend } from 'colord';
+	import type { CharacterSetOption } from '$lib/passwordHasher';
+	import PasswordNodeElement from './passwordNodeElement.svelte';
 
 	let { masterPassword, reRender } = $props();
-
-	let selectedNode: PasswordNode | null = $state.raw(null);
-
+	let selectedNode: PasswordNode | null = $state(null);
+	let selectedNodeElement = $state(null);
 	let showHash: boolean = $state(false);
 	let childNodeName = $state('');
 	let creatingChild = $state(false);
@@ -22,7 +23,8 @@
 	});
 
 	useOnSelectionChange(({ nodes, edges }) => {
-		selectedNode = nodes.length > 0 ? nodes[0].data.passwordNode : null;
+		selectedNode = nodes.length > 0 ? ((nodes[0] as any).data.passwordNode as PasswordNode) : null;
+		selectedNodeElement = nodes.length > 0 ? (nodes[0] as any) : null;
 		seedValue = selectedNode ? selectedNode.seed : 0;
 		lengthValue = selectedNode ? selectedNode.length : 32;
 		// selectedCharacterSet = selectedNode ? selectedNode.characterSet : characterSetChoices[0];
@@ -53,6 +55,17 @@
 	function nodeHashRefresh() {
 		if (!selectedNode) return;
 		currentHash = selectedNode.calculateHash(masterPassword);
+	}
+
+	// Ensure UI reacts when toggling nested characterSet flags by reassigning the object
+	function toggleChar<K extends keyof CharacterSetOption>(key: K) {
+		if (!selectedNode) return;
+		selectedNode.characterSet = { ...selectedNode.characterSet, [key]: !selectedNode.characterSet[key] };
+		nodeHashRefresh();
+		let pastSelectedNode = selectedNode;
+		selectedNode = null;
+		selectedNode = pastSelectedNode;
+		// reRender();
 	}
 
 	///////////////////////////
@@ -125,7 +138,22 @@
 					<div class="mb-2 flex items-center gap-2">
 						<span class="text-muted-foreground text-s w-[80px] font-medium">Character Set:</span>
 						<div class="flex-1">
-							<CharacterSetDropdown bind:selection={selectedNode.characterSet} {nodeHashRefresh} />
+							<div class="mb-2 flex flex-wrap gap-1">
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.upperAlphanumeric ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('upperAlphanumeric')}> A-Z </button>
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.lowerAlphanumeric ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('lowerAlphanumeric')}> a-z </button>
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.numbers ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('numbers')}> 0-9 </button>
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.simpleSpecialCharacters ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('simpleSpecialCharacters')}> # $ % & @ ^ ` ~</button>
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.extendedASCII ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('extendedASCII')}> Extended ASCII </button>
+							</div>
+							<div class="flex flex-wrap gap-1">
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.punctuationCharacters ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('punctuationCharacters')}> . , : ; </button>
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.quotations ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('quotations')}> " ' </button>
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.dashes ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('dashes')}> / \ | - _ </button>
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.mathSymbols ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('mathSymbols')}> {'> < * + ! ? ='} </button>
+								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.braces ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('braces')}> {'{} [] ()'} </button>
+							</div>
+
+							<!-- <CharacterSetDropdown bind:selection={selectedNode.characterSet} {nodeHashRefresh} /> -->
 						</div>
 					</div>
 					<div class="mb-2 flex items-center gap-2">

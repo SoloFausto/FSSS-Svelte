@@ -14,6 +14,7 @@
 
 	var rootPasswordNode: PasswordNode = $state(new PasswordNode('root', null));
 	var inputSchemaFile: FileList | null = $state(null);
+	let colorMode: ColorMode = $state('dark');
 
 	var graphNodes: any[] = $state([]);
 	var graphEdges: any[] = $state([]);
@@ -77,8 +78,6 @@
 		};
 	}
 	function showTutorial() {}
-
-	let colorMode: ColorMode = $state('dark');
 </script>
 
 <div>

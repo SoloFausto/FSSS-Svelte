@@ -1,6 +1,6 @@
 import { hash } from "$lib/passwordHasher";
 import { type Edge, type Node, type Position } from "@xyflow/svelte";
-import { type CharacterSetOption, characterSetChoices } from '$lib/passwordHasher';
+import { type CharacterSetOption } from '$lib/passwordHasher';
 import { Colord, colord, extend } from "colord";
 import a11yPlugin from "colord/plugins/a11y";
 
@@ -28,12 +28,25 @@ export class PasswordNode {
     this.color = colord("rgb(255, 255, 255)");
     this.borderColor = colord("rgb(0, 0, 0)");
     this.textColor = colord("rgb(0, 0, 0)");
-    this.characterSet = characterSetChoices[2];
+    this.characterSet = {
+      upperAlphanumeric: true,
+      lowerAlphanumeric: true,
+      numbers: true,
+      simpleSpecialCharacters: true,
+      punctuationCharacters: false,
+      quotations: true,
+      dashes: true,
+      mathSymbols: true,
+      braces: false,
+      extendedASCII: false
+    };
   }
   static fromJSON(data: any): PasswordNode {
     const node = new PasswordNode(data.value, null);
     node.label = data.label;
     node.color = data.color;
+    node.borderColor = data.borderColor;
+    node.textColor = data.textColor;
     node.seed = data.seed;
     node.characterSet = data.characterSet;
     node.length = data.length;
@@ -110,12 +123,12 @@ export class PasswordNode {
       position: { x: 0, y: 0 },
       data: {
         label: this.label,
-        sourceHandles: sourceHandles,
-        targetHandles: targetHandles,
         passwordNode: this,
         textColor: this.textColor.toHex(),
         color: this.color.toHex(),
         borderColor: this.borderColor.toHex(),
+        sourceHandles: sourceHandles,
+        targetHandles: targetHandles,
       },
       // style: { backgroundColor: this.color }
     };

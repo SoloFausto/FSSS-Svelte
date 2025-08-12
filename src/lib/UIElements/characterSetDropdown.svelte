@@ -6,7 +6,6 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils.js';
-	import { characterSetChoices } from '$lib/passwordHasher';
 
 	let open = $state(false);
 	let { selection = $bindable(), nodeHashRefresh } = $props();
@@ -26,6 +25,7 @@
 	}
 </script>
 
+<!-- 
 <Popover.Root bind:open>
 	<Popover.Trigger bind:ref={triggerRef}>
 		{#snippet child({ props })}
@@ -59,4 +59,4 @@
 			</Command.List>
 		</Command.Root>
 	</Popover.Content>
-</Popover.Root>
+</Popover.Root> -->
