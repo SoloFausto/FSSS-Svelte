@@ -112,10 +112,14 @@
 		<SvelteFlow nodes={graphNodes} edges={graphEdges} fitView ondelete={reRenderGraph} nodesDraggable={false} nodesConnectable={false} {nodeTypes} {colorMode}>
 			<Background variant={BackgroundVariant.Dots} />
 			<Panel position="top-left">
-				<Dropdown bind:masterPassword {exportSchema} bind:importSchemaFile={inputSchemaFile} bind:colorMode {saveToLocalStorage} {loadFromLocalStorage} />
+				<div class="mt-6">
+					<Dropdown bind:masterPassword {exportSchema} bind:importSchemaFile={inputSchemaFile} bind:colorMode {saveToLocalStorage} {loadFromLocalStorage} />
+				</div>
 			</Panel>
 			<Panel position={isInPortrait ? 'bottom-center' : 'top-right'}>
-				<SideMenu reRender={reRenderGraph} {masterPassword} {isInPortrait} />
+				<div class="mt-6">
+					<SideMenu reRender={reRenderGraph} {masterPassword} {isInPortrait} />
+				</div>
 			</Panel>
 		</SvelteFlow>
 	</div>
