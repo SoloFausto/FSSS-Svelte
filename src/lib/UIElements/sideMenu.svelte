@@ -1,16 +1,13 @@
 <script lang="ts">
 	import { PasswordNode } from '$lib/paswordNode';
 	import { useOnSelectionChange, useSvelteFlow } from '@xyflow/svelte';
-	import CharacterSetDropdown from './characterSetDropdown.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import ColorPicker from 'svelte-awesome-color-picker';
 	import { Colord, colord, extend } from 'colord';
 	import type { CharacterSetOption } from '$lib/passwordHasher';
-	import PasswordNodeElement from './passwordNodeElement.svelte';
 
-	let { masterPassword, reRender } = $props();
+	let { masterPassword, reRender, isInPortrait } = $props();
 	let selectedNode: PasswordNode | null = $state(null);
-	let selectedNodeElement = $state(null);
 	let showHash: boolean = $state(false);
 	let childNodeName = $state('');
 	let creatingChild = $state(false);
@@ -24,12 +21,12 @@
 
 	useOnSelectionChange(({ nodes, edges }) => {
 		selectedNode = nodes.length > 0 ? ((nodes[0] as any).data.passwordNode as PasswordNode) : null;
-		selectedNodeElement = nodes.length > 0 ? (nodes[0] as any) : null;
 		seedValue = selectedNode ? selectedNode.seed : 0;
 		lengthValue = selectedNode ? selectedNode.length : 32;
 		// selectedCharacterSet = selectedNode ? selectedNode.characterSet : characterSetChoices[0];
 		selectedColor = selectedNode ? selectedNode.color.toHex() : colord('#ffffff').toHex();
 		showHash = false;
+		savedLabel = selectedNode ? selectedNode.label : '';
 	});
 
 	////////////////////////////
@@ -57,7 +54,6 @@
 		currentHash = selectedNode.calculateHash(masterPassword);
 	}
 
-	// Ensure UI reacts when toggling nested characterSet flags by reassigning the object
 	function toggleChar<K extends keyof CharacterSetOption>(key: K) {
 		if (!selectedNode) return;
 		selectedNode.characterSet = { ...selectedNode.characterSet, [key]: !selectedNode.characterSet[key] };
@@ -98,26 +94,33 @@
 			selectedNode.setColor(colord(selectedColor));
 		}
 	});
+	let savedLabel: string = $state('');
+	$effect(() => {
+		if (selectedNode) {
+			selectedNode.setLabel(savedLabel);
+			savedLabel = selectedNode.label;
+		}
+	});
 </script>
 
 <!-- Sidebar overlay -->
 <div class="" role="button" tabindex="0">
 	<!-- Sidebar content -->
-	<div class="bg-popover flex h-full w-120 flex-col overflow-hidden border-l shadow-xl" aria-modal="true">
+	<div class="bg-popover flex {isInPortrait ? 'max-h-[35svh]' : 'max-h-[100svh]'} w-[clamp(16rem,90vw,26rem)] max-w-full flex-col overflow-y-auto border-l shadow-xl md:overflow-hidden" aria-modal="true">
 		<!-- Header -->
-		<div class="bg-popover flex items-center justify-between border-b px-4 py-3">
+		<div class="bg-popover sticky top-0 z-10 flex items-center justify-between border-b px-4 py-3">
 			<h2 class="text-popover-foreground text-lg font-semibold">Node Information</h2>
 		</div>
 
 		<!-- Content -->
-		<div class="flex-1 overflow-y-auto p-4">
+		<div class="flex-1 overflow-visible p-4 md:overflow-y-auto">
 			{#if selectedNode}
 				<div class="mb-6">
 					<h3 class="text-popover-foreground mb-3 border-b pb-1.5 text-sm font-semibold">Basic Information</h3>
 					<div class="mb-2 flex items-center gap-2">
 						<span class="text-muted-foreground text-s w-[80px] font-medium">Label:</span>
 						<form onsubmit={() => reRender()} class="flex flex-1 items-center gap-1.5">
-							<input class="bg-background text-foreground focus-visible:ring-ring text-s flex-1 rounded border px-2 py-1 font-mono focus:outline-none focus-visible:ring-1" type="text" bind:value={selectedNode.label} />
+							<input class="bg-background text-foreground focus-visible:ring-ring text-s flex-1 rounded border px-2 py-1 font-mono focus:outline-none focus-visible:ring-1" type="text" bind:value={savedLabel} />
 							<Button type="submit" variant="outline" size="sm" aria-label="Update label" class="h-7 w-7 p-0">
 								<img src="save.svg" alt="Save label" class="h-3 w-3" />
 							</Button>
@@ -128,7 +131,7 @@
 						<span class="text-muted-foreground text-s w-[80px] font-medium"></span>
 						<div class="flex flex-1 items-center gap-1.5">
 							<form onsubmit={() => reRender()} class="flex flex-1 items-center gap-1.5">
-								<ColorPicker bind:hex={selectedColor} position="responsive" />
+								<ColorPicker bind:hex={selectedColor} position="fixed" />
 								<Button type="submit" variant="outline" size="sm" aria-label="Update label" class="h-7 w-7 p-0">
 									<img src="save.svg" alt="Save label" class="h-3 w-3" />
 								</Button>
@@ -152,8 +155,6 @@
 								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.mathSymbols ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('mathSymbols')}> {'> < * + ! ? ='} </button>
 								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.braces ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('braces')}> {'{} [] ()'} </button>
 							</div>
-
-							<!-- <CharacterSetDropdown bind:selection={selectedNode.characterSet} {nodeHashRefresh} /> -->
 						</div>
 					</div>
 					<div class="mb-2 flex items-center gap-2">

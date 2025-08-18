@@ -31,7 +31,7 @@ function decodeBase64(str: string): Uint8Array {
     return new Uint8Array([...atob(str)].map(c => c.charCodeAt(0)));
 }
 
-async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
+async function deriveKey(password: string, salt): Promise<CryptoKey> {
     const enc = new TextEncoder();
     const keyMaterial = await crypto.subtle.importKey(
         "raw",
@@ -44,9 +44,10 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
     return crypto.subtle.deriveKey(
         {
             name: "PBKDF2",
+            hash: "SHA-256",
             salt,
-            iterations: 200000,
-            hash: "SHA-256"
+            iterations: 200000
+            
         },
         keyMaterial,
         { name: "AES-GCM", length: 256 },

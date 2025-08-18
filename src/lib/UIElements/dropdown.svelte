@@ -3,7 +3,7 @@
 	import { type ColorMode } from '@xyflow/svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import logo from '$lib/img/favicon.svg';
-	let { colorMode = $bindable(), masterPassword = $bindable(''), exportSchema, importSchemaFile = $bindable() } = $props();
+	let { colorMode = $bindable(), masterPassword = $bindable(''), exportSchema, importSchemaFile = $bindable(), saveToLocalStorage, loadFromLocalStorage } = $props();
 
 	function toggleDarkMode() {
 		colorMode = colorMode === 'dark' ? 'light' : 'dark';
@@ -25,12 +25,22 @@
 					<input type="text" name="masterPassword" placeholder="Enter Master Password here..." bind:value={masterPassword} />
 				</DropdownMenu.SubContent>
 			</DropdownMenu.Sub>
-			<DropdownMenu.Item>
-				<button onclick={exportSchema}>Export Graph Schema</button>
-			</DropdownMenu.Item>
-			<DropdownMenu.Item>
-				<input accept=".json" bind:files={importSchemaFile} type="file" />
-			</DropdownMenu.Item>
+			<DropdownMenu.Sub>
+				<DropdownMenu.SubTrigger>Schema File</DropdownMenu.SubTrigger>
+				<DropdownMenu.SubContent>
+					<DropdownMenu.Item onclick={exportSchema}>Export Graph Schema File</DropdownMenu.Item>
+					<DropdownMenu.Item>
+						<input accept=".json" bind:files={importSchemaFile} type="file" />
+					</DropdownMenu.Item>
+				</DropdownMenu.SubContent>
+			</DropdownMenu.Sub>
+			<DropdownMenu.Sub>
+				<DropdownMenu.SubTrigger>Local Storage</DropdownMenu.SubTrigger>
+				<DropdownMenu.SubContent>
+					<DropdownMenu.Item onclick={saveToLocalStorage}>Save</DropdownMenu.Item>
+					<DropdownMenu.Item onclick={loadFromLocalStorage}>Load</DropdownMenu.Item>
+				</DropdownMenu.SubContent>
+			</DropdownMenu.Sub>
 			<DropdownMenu.Item>
 				Show tutorial
 				<DropdownMenu.Shortcut>⌘S</DropdownMenu.Shortcut>
