@@ -1,38 +1,8 @@
-# sv
+# Fausto's Modified Super Secret Settings
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+[Image]
+FSSS is a hashing password manager inspired by PagoruDev's version which features a node based interface to manage passwords. The program uses the value of each node and it's parents, along with a master password, as an input to a semi random generator to create a unique password. This generated password is customizable further with the properties that are present in each node.
 
-## Creating a project
+The program supports exporting these nodes as an encrypted schema file that hides the names of each node, but never exports the passwords as they are always calculated on the fly. You can also store an encrypted version in the browser storage to always have easy access in your passwords at any time.
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Currently the software supports being ran as a native Android app, a progressive web app, or simply by the browser.
