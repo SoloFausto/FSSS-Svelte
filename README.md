@@ -1,6 +1,6 @@
 # Fausto's Modified Super Secret Settings
 
-![FSSS Logo](https://github.com/SoloFausto/FSSS-Svelte/blob/main/src/lib/img/favicon-192x192.png)
+![FSSS Logo](https://github.com/SoloFausto/FSSS-Svelte/blob/main/src/lib/img/favicon-192x192.png)<br/>
 FSSS is a hashing password manager inspired by PagoruDev's version which features a node based interface to manage passwords. The program uses the value of each node and it's parents, along with a master password, as an input to a semi random generator to create a unique password. This generated password is customizable further with the properties that are present in each node.
 
 > [!CAUTION]
