@@ -38,6 +38,7 @@
     "@capacitor/android": "^7.4.2",
     "@capacitor/cli": "^7.4.2",
     "@capacitor/core": "^7.4.2",
+    "@sveltejs/adapter-node": "^5.3.1",
     "@sveltejs/adapter-static": "^3.0.9",
     "@tailwindcss/vite": "^4.1.11",
     "@types/dagre": "^0.7.53",
