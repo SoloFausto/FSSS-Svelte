@@ -8,7 +8,6 @@
 	import SideMenu from '$lib/UIElements/sideMenu.svelte';
 	import { encryptGraph, decryptGraph, type EncryptedGraph } from '$lib/encryption';
 	import { notify } from '$lib/notifications';
-	import Cookies from 'js-cookie';
 
 	const nodeTypes = { passwordNode: PasswordNodeElement };
 	var darkMode: boolean = $state(true);
@@ -24,11 +23,12 @@
 	let rawNodes: Node[] = new Array();
 	let rawEdges: Edge[] = new Array();
 	reRenderGraph();
-
+	notify({ type: 'info', message: 'Welcome to FSSS! Check the tutorial on the top right for a quick start.' });
 	$effect(() => {
 		({ nodes: graphNodes, edges: graphEdges } = getLayoutedElements(rawNodes, rawEdges));
 	});
 
+	// functions concerned with visual effects
 	const toggleDarkMode = () => {
 		darkMode = !darkMode;
 		document.body.classList.toggle('dark-mode', darkMode);
@@ -39,6 +39,8 @@
 		rawEdges = rootPasswordNode.childrenToEdges();
 		({ nodes: graphNodes, edges: graphEdges } = getLayoutedElements(rawNodes, rawEdges));
 	}
+
+	// functions concerned with importing and exporting schema files
 	async function exportSchema() {
 		if (!masterPassword) {
 			notify({ type: 'warning', message: 'Set a master password before exporting.' });
@@ -74,6 +76,8 @@
 			inputSchemaFile = null;
 		}
 	});
+
+	// functions concerned with localstorage
 	async function loadFromLocalStorage() {
 		if (!checkIfLocalStorageExists() || !masterPassword) {
 			return;
@@ -104,7 +108,6 @@
 	function checkIfLocalStorageExists(): boolean {
 		return localStorage.getItem('encryptedGraphSchema') !== null;
 	}
-	function showTutorial() {}
 </script>
 
 <div>

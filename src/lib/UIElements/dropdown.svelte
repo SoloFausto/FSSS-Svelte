@@ -42,13 +42,9 @@
 				</DropdownMenu.SubContent>
 			</DropdownMenu.Sub>
 			<DropdownMenu.Item>
-				Show tutorial
-				<DropdownMenu.Shortcut>⌘S</DropdownMenu.Shortcut>
+				<a href="#">Show Tutorial </a>
 			</DropdownMenu.Item>
-			<DropdownMenu.Item>
-				Share FSSS
-				<DropdownMenu.Shortcut>⌘K</DropdownMenu.Shortcut>
-			</DropdownMenu.Item>
+			<DropdownMenu.Item>Share FSSS</DropdownMenu.Item>
 			<DropdownMenu.Item>
 				<button onclick={toggleDarkMode}>{colorMode === 'dark' ? 'Disable Dark Mode' : 'Enable Dark Mode'}</button>
 			</DropdownMenu.Item>
