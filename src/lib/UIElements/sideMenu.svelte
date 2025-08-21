@@ -106,7 +106,7 @@
 <!-- Sidebar overlay -->
 <div class="" role="button" tabindex="0">
 	<!-- Sidebar content -->
-	<div class="bg-popover flex {isInPortrait ? 'max-h-[35svh]' : 'max-h-[100svh]'} w-[clamp(16rem,90vw,26rem)] max-w-full flex-col overflow-y-auto border-l shadow-xl md:overflow-hidden" aria-modal="true">
+	<div class="bg-popover flex {isInPortrait ? 'max-h-[35svh]' : 'max-h-[100svh]'} w-[clamp(16rem,90vw,31rem)] max-w-full flex-col overflow-y-auto border-l shadow-xl md:overflow-hidden" aria-modal="true">
 		<!-- Header -->
 		<div class="bg-popover sticky top-0 z-10 flex items-center justify-between border-b px-4 py-3">
 			<h2 class="text-popover-foreground text-lg font-semibold">Node Information</h2>
@@ -138,33 +138,36 @@
 							</form>
 						</div>
 					</div>
-					<div class="mb-2 flex items-center gap-2">
-						<span class="text-muted-foreground text-s w-[80px] font-medium">Character Set:</span>
-						<div class="flex-1">
-							<div class="mb-2 flex flex-wrap gap-1">
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.upperAlphanumeric ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('upperAlphanumeric')}> A-Z </button>
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.lowerAlphanumeric ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('lowerAlphanumeric')}> a-z </button>
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.numbers ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('numbers')}> 0-9 </button>
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.simpleSpecialCharacters ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('simpleSpecialCharacters')}> # $ % & @ ^ ` ~</button>
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.extendedASCII ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('extendedASCII')}> Extended ASCII </button>
-							</div>
-							<div class="flex flex-wrap gap-1">
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.punctuationCharacters ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('punctuationCharacters')}> . , : ; </button>
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.quotations ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('quotations')}> " ' </button>
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.dashes ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('dashes')}> / \ | - _ </button>
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.mathSymbols ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('mathSymbols')}> {'> < * + ! ? ='} </button>
-								<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.braces ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('braces')}> {'{} [] ()'} </button>
+					{#if selectedNode && !selectedNode.isFolder}
+						<div class="mb-2 flex items-center gap-2">
+							<span class="text-muted-foreground text-s w-[80px] font-medium">Character Set:</span>
+							<div class="flex-1">
+								<div class="mb-2 flex flex-wrap gap-1">
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.upperAlphanumeric ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('upperAlphanumeric')}> A-Z </button>
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.lowerAlphanumeric ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('lowerAlphanumeric')}> a-z </button>
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.numbers ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('numbers')}> 0-9 </button>
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.simpleSpecialCharacters ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('simpleSpecialCharacters')}> # $ % & @ ^ ` ~</button>
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.extendedASCII ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('extendedASCII')}> Extended ASCII </button>
+								</div>
+								<div class="flex flex-wrap gap-1">
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.punctuationCharacters ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('punctuationCharacters')}> . , : ; </button>
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.quotations ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('quotations')}> " ' </button>
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.dashes ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('dashes')}> / \ | - _ </button>
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.mathSymbols ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('mathSymbols')}> {'> < * + ! ? ='} </button>
+									<button type="button" class="rounded border px-2 py-1 text-xs transition-colors {selectedNode && selectedNode.characterSet.braces ? 'border-blue-500 bg-blue-500 text-white' : 'bg-background text-foreground border-border hover:bg-accent'}" onclick={() => toggleChar('braces')}> {'{} [] ()'} </button>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="mb-2 flex items-center gap-2">
-						<span class="text-muted-foreground text-s w-[80px] font-medium">Seed:</span>
-						<input type="number" min="0" id="nodeSeed" name="NodeSeed" placeholder="0" bind:value={seedValue} oninput={() => nodeHashRefresh()} class="bg-background text-foreground focus-visible:ring-ring text-s flex-1 rounded border px-2 py-1 font-mono focus:outline-none focus-visible:ring-1" />
-					</div>
-					<div class="mb-2 flex items-center gap-2">
-						<span class="text-muted-foreground text-s w-[80px] font-medium">Length:</span>
-						<input type="number" min="1" max="100" id="nodeLength" name="NodeLength" placeholder="32" bind:value={lengthValue} oninput={() => nodeHashRefresh()} class="bg-background text-foreground focus-visible:ring-ring text-s flex-1 rounded border px-2 py-1 font-mono focus:outline-none focus-visible:ring-1" />
-					</div>
+
+						<div class="mb-2 flex items-center gap-2">
+							<span class="text-muted-foreground text-s w-[80px] font-medium">Seed:</span>
+							<input type="number" min="0" id="nodeSeed" name="NodeSeed" placeholder="0" bind:value={seedValue} oninput={() => nodeHashRefresh()} class="bg-background text-foreground focus-visible:ring-ring text-s flex-1 rounded border px-2 py-1 font-mono focus:outline-none focus-visible:ring-1" />
+						</div>
+						<div class="mb-2 flex items-center gap-2">
+							<span class="text-muted-foreground text-s w-[80px] font-medium">Length:</span>
+							<input type="number" min="1" max="100" id="nodeLength" name="NodeLength" placeholder="32" bind:value={lengthValue} oninput={() => nodeHashRefresh()} class="bg-background text-foreground focus-visible:ring-ring text-s flex-1 rounded border px-2 py-1 font-mono focus:outline-none focus-visible:ring-1" />
+						</div>
+					{/if}
 				</div>
 
 				<div class="mb-6">
@@ -184,6 +187,22 @@
 					<div class="mb-2 flex items-center gap-2">
 						<span class="text-muted-foreground text-s w-[80px] font-medium">Children Count:</span>
 						<span class="text-foreground text-s font-mono">{selectedNode.children.length}</span>
+					</div>
+					<div class="mb-2 flex items-center gap-2">
+						<span class="text-muted-foreground text-s w-[80px] font-medium">Is Folder:</span>
+						<button
+							type="button"
+							class="text-s rounded border px-2 py-1 font-mono font-semibold transition-colors {selectedNode.isFolder ? 'border-emerald-600 bg-emerald-50 text-emerald-600 dark:bg-emerald-900 dark:text-emerald-400' : 'border-red-600 bg-red-50 text-red-600 dark:bg-red-900 dark:text-red-400'}"
+							onclick={() => {
+								if (selectedNode) {
+									selectedNode.isFolder = !selectedNode.isFolder;
+									reRender();
+								}
+							}}
+							aria-pressed={selectedNode && selectedNode.isFolder}
+						>
+							{selectedNode && selectedNode.isFolder ? 'Yes' : 'No'}
+						</button>
 					</div>
 					{#if creatingChild}
 						<div class="mb-3">
@@ -207,39 +226,40 @@
 						<Button onclick={() => removeNode(selectedNode!)} class="text-s h-8 flex-1 bg-red-400">Remove Node</Button>
 					</div>
 				</div>
+				{#if selectedNode && !selectedNode.isFolder}
+					<div class="mb-6">
+						<h3 class="text-popover-foreground mb-3 border-b pb-1.5 text-sm font-semibold">Password</h3>
 
-				<div class="mb-6">
-					<h3 class="text-popover-foreground mb-3 border-b pb-1.5 text-sm font-semibold">Password</h3>
-
-					<div class="mb-3 flex flex-col gap-2">
-						<div class="flex items-center gap-2">
-							<span class="text-muted-foreground text-s w-[80px] font-medium">Value:</span>
-							<span class="text-foreground text-s font-mono">{selectedNode.value}</span>
-						</div>
-						<div class="flex items-start gap-2">
-							<span class="text-muted-foreground text-s w-[80px] font-medium">Generated Hash:</span>
-							<div class="bg-muted/50 flex-1 rounded border p-2">
-								<div class="flex items-center gap-1.5">
-									<input class="text-foreground text-s flex-1 border-none bg-transparent font-mono break-all outline-none" type={showHash ? 'text' : 'password'} readonly value={currentHash} style="padding: 0; margin: 0;" />
-									<Button type="button" variant="outline" onclick={() => (showHash = !showHash)} aria-label={showHash ? 'Hide hash' : 'Show hash'} class="h-6 w-6 p-1">
-										<img src="eye.svg" alt={showHash ? 'Hide hash' : 'Show hash'} class="h-6 w-6" />
-									</Button>
-									<Button
-										type="button"
-										variant="outline"
-										onclick={async () => {
-											await navigator.clipboard.writeText(currentHash);
-										}}
-										aria-label="Copy hash"
-										class="h-6 w-6 p-1"
-									>
-										<img src="copy.svg" alt="Copy hash" class="h-6 w-6" />
-									</Button>
+						<div class="mb-3 flex flex-col gap-2">
+							<div class="flex items-center gap-2">
+								<span class="text-muted-foreground text-s w-[80px] font-medium">Value:</span>
+								<span class="text-foreground text-s font-mono">{selectedNode.value}</span>
+							</div>
+							<div class="flex items-start gap-2">
+								<span class="text-muted-foreground text-s w-[80px] font-medium">Generated Hash:</span>
+								<div class="bg-muted/50 flex-1 rounded border p-2">
+									<div class="flex items-center gap-1.5">
+										<input class="text-foreground text-s flex-1 border-none bg-transparent font-mono break-all outline-none" type={showHash ? 'text' : 'password'} readonly value={currentHash} style="padding: 0; margin: 0;" />
+										<Button type="button" variant="outline" onclick={() => (showHash = !showHash)} aria-label={showHash ? 'Hide hash' : 'Show hash'} class="h-6 w-6 p-1">
+											<img src="eye.svg" alt={showHash ? 'Hide hash' : 'Show hash'} class="h-6 w-6" />
+										</Button>
+										<Button
+											type="button"
+											variant="outline"
+											onclick={async () => {
+												await navigator.clipboard.writeText(currentHash);
+											}}
+											aria-label="Copy hash"
+											class="h-6 w-6 p-1"
+										>
+											<img src="copy.svg" alt="Copy hash" class="h-6 w-6" />
+										</Button>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				{/if}
 			{:else}
 				<!-- No node selected -->
 				<div class="text-muted-foreground py-6 text-center">

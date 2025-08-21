@@ -14,6 +14,7 @@
 
 	var masterPassword: string = $state('');
 	var rootPasswordNode: PasswordNode = $state(new PasswordNode('root', null));
+	rootPasswordNode.isFolder = true;
 
 	var inputSchemaFile: FileList | null = $state(null);
 	let colorMode: ColorMode = $state('dark');
@@ -80,6 +81,7 @@
 	// functions concerned with localstorage
 	async function loadFromLocalStorage() {
 		if (!checkIfLocalStorageExists() || !masterPassword) {
+			notify({ type: 'warning', message: 'Set a master password and ensure schema exists in local storage before loading.' });
 			return;
 		}
 		try {

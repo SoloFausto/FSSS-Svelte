@@ -18,6 +18,7 @@ export class PasswordNode {
   seed: number = 0;
   characterSet: CharacterSetOption;
   length: number = 32;
+  isFolder: boolean;
   parent: PasswordNode | null;
 
   constructor(value: string, parent: PasswordNode | null) {
@@ -28,6 +29,7 @@ export class PasswordNode {
     this.color = colord("rgb(255, 255, 255)");
     this.borderColor = colord("rgb(0, 0, 0)");
     this.textColor = colord("rgb(0, 0, 0)");
+    this.isFolder = false;
     this.characterSet = {
       upperAlphanumeric: true,
       lowerAlphanumeric: true,
@@ -49,6 +51,7 @@ export class PasswordNode {
     node.textColor = colord(data.textColor.parsed);
     node.seed = data.seed;
     node.characterSet = data.characterSet;
+    node.isFolder = data.isFolder;
     node.length = data.length;
     for (const childData of data.children) {
       PasswordNode.fromJSON(childData);
