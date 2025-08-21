@@ -1,6 +1,5 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { type ColorMode } from '@xyflow/svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import logo from '$lib/img/favicon.svg';
 	let { colorMode = $bindable(), masterPassword = $bindable(''), exportSchema, importSchemaFile = $bindable(), saveToLocalStorage, loadFromLocalStorage } = $props();
@@ -30,7 +29,8 @@
 				<DropdownMenu.SubContent>
 					<DropdownMenu.Item onclick={exportSchema}>Export Graph Schema File</DropdownMenu.Item>
 					<DropdownMenu.Item>
-						<input accept=".json" bind:files={importSchemaFile} type="file" />
+						<label for="importSchemaFile">Choose Schema File</label>
+						<input accept=".json" bind:files={importSchemaFile} id="importSchemaFile" type="file" style="display:none;" />
 					</DropdownMenu.Item>
 				</DropdownMenu.SubContent>
 			</DropdownMenu.Sub>
@@ -42,9 +42,9 @@
 				</DropdownMenu.SubContent>
 			</DropdownMenu.Sub>
 			<DropdownMenu.Item>
-				<a href="#">Show Tutorial </a>
+				<a href="https://github.com/SoloFausto/FSSS-Svelte/wiki/User-Guide">Show Tutorial </a>
 			</DropdownMenu.Item>
-			<DropdownMenu.Item>Share FSSS</DropdownMenu.Item>
+			<DropdownMenu.Item><a href="https://github.com/SoloFausto/FSSS-Svelte">GitHub</a></DropdownMenu.Item>
 			<DropdownMenu.Item>
 				<button onclick={toggleDarkMode}>{colorMode === 'dark' ? 'Disable Dark Mode' : 'Enable Dark Mode'}</button>
 			</DropdownMenu.Item>
