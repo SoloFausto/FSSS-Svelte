@@ -123,7 +123,7 @@
 			</Panel>
 			<Panel position={isInPortrait ? 'bottom-center' : 'top-right'}>
 				<div class="mt-6">
-					<SideMenu reRender={reRenderGraph} {masterPassword} {isInPortrait} />
+					<SideMenu reRender={reRenderGraph} {masterPassword} {isInPortrait} {notify} />
 				</div>
 			</Panel>
 		</SvelteFlow>

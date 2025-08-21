@@ -6,7 +6,7 @@
 	import { Colord, colord, extend } from 'colord';
 	import type { CharacterSetOption } from '$lib/passwordHasher';
 
-	let { masterPassword, reRender, isInPortrait } = $props();
+	let { masterPassword, reRender, isInPortrait, notify } = $props();
 	let selectedNode: PasswordNode | null = $state(null);
 	let showHash: boolean = $state(false);
 	let childNodeName = $state('');
@@ -248,6 +248,7 @@
 											variant="outline"
 											onclick={async () => {
 												await navigator.clipboard.writeText(currentHash);
+												notify({ type: 'success', message: 'Hash copied to clipboard!' });
 											}}
 											aria-label="Copy hash"
 											class="h-6 w-6 p-1"
