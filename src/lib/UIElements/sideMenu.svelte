@@ -36,6 +36,7 @@
 		if (selectedNode && value.trim() !== '') {
 			const newChild = new PasswordNode(value, selectedNode);
 			selectedNode.addChild(newChild);
+			newChild.setColor(selectedNode.color);
 			creatingChild = false;
 			childNodeName = '';
 			reRender();
@@ -58,12 +59,14 @@
 		if (!selectedNode) return;
 		selectedNode.characterSet = { ...selectedNode.characterSet, [key]: !selectedNode.characterSet[key] };
 		nodeHashRefresh();
+		dirtySideMenuRefresh();
+		// reRender();
+	}
+	function dirtySideMenuRefresh() {
 		let pastSelectedNode = selectedNode;
 		selectedNode = null;
 		selectedNode = pastSelectedNode;
-		// reRender();
 	}
-
 	///////////////////////////
 	// Node Property setters
 	/////////////////////////
@@ -196,7 +199,7 @@
 							onclick={() => {
 								if (selectedNode) {
 									selectedNode.isFolder = !selectedNode.isFolder;
-									reRender();
+									dirtySideMenuRefresh();
 								}
 							}}
 							aria-pressed={selectedNode && selectedNode.isFolder}
