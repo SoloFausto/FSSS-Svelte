@@ -21,7 +21,7 @@
 			<DropdownMenu.Sub>
 				<DropdownMenu.SubTrigger>Enter Master Password</DropdownMenu.SubTrigger>
 				<DropdownMenu.SubContent>
-					<input type="text" name="masterPassword" placeholder="Enter Master Password here..." bind:value={masterPassword} />
+					<input type="password" name="masterPassword" placeholder="Enter Master Password here..." bind:value={masterPassword} />
 				</DropdownMenu.SubContent>
 			</DropdownMenu.Sub>
 			<DropdownMenu.Sub>
