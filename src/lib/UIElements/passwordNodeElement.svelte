@@ -7,7 +7,7 @@
 	let { updateNodeData } = useSvelteFlow();
 </script>
 
-<div class="password-node" style="background-color: {data.color}; border-color: {data.borderColor};">
+<div class="flex min-h-[3rem] w-[6rem] flex-col items-center rounded-lg border-2 px-4 py-2 shadow-md" style="background-color: {data.color}; border-color: {data.borderColor};">
 	{#if data.sourceHandles == 1}
 		<Handle type="target" position={Position.Top} />
 	{/if}

@@ -3,14 +3,14 @@
 	import { PasswordNode } from '$lib/paswordNode';
 	import PasswordNodeElement from '$lib/UIElements/passwordNodeElement.svelte';
 	import { SvelteFlow, Background, Panel, BackgroundVariant, type Edge, type Node, type ColorMode } from '@xyflow/svelte';
-	import { getLayoutedElements } from '$lib/dagre/dagreLayout';
+	import { getLayoutedElements } from '$lib/layout/dagreLayout';
 	import Dropdown from '$lib/UIElements/dropdown.svelte';
 	import SideMenu from '$lib/UIElements/sideMenu.svelte';
 	import { encryptGraph, decryptGraph, type EncryptedGraph } from '$lib/encryption';
 	import { notify } from '$lib/notifications';
 
 	const nodeTypes = { passwordNode: PasswordNodeElement };
-	var darkMode: boolean = $state(true);
+	let isInPortrait: boolean = typeof window !== 'undefined' && window.matchMedia('(orientation: portrait)').matches;
 
 	var masterPassword: string = $state('');
 	var rootPasswordNode: PasswordNode = $state(new PasswordNode('root', null));
@@ -30,11 +30,6 @@
 	});
 
 	// functions concerned with visual effects
-	const toggleDarkMode = () => {
-		darkMode = !darkMode;
-		document.body.classList.toggle('dark-mode', darkMode);
-	};
-	let isInPortrait: boolean = typeof window !== 'undefined' && window.matchMedia('(orientation: portrait)').matches;
 	function reRenderGraph() {
 		rawNodes = rootPasswordNode.childrenToNodes();
 		rawEdges = rootPasswordNode.childrenToEdges();
