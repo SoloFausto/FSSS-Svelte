@@ -24,7 +24,7 @@
 	let rawNodes: Node[] = new Array();
 	let rawEdges: Edge[] = new Array();
 	reRenderGraph();
-	notify({ type: 'info', message: 'Welcome to FSSS! Check the tutorial on the top right for a quick start.' });
+	notify({ type: 'info', message: 'Welcome to FSSS! Check the tutorial on the top left for a quick start.' });
 	$effect(() => {
 		({ nodes: graphNodes, edges: graphEdges } = getLayoutedElements(rawNodes, rawEdges));
 	});
