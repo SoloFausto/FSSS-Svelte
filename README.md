@@ -9,4 +9,4 @@ FSSS is a hashing password manager inspired by [Pagoru's version](https://github
 
 The program supports exporting these nodes as an encrypted schema file that hides the names of each node, but never exports the passwords as they are always calculated on the fly. You can also store an encrypted version in the browser storage to always have easy access in your passwords at any time.
 
-Currently the software supports being ran as a progressive web app, or simply by the browser; there is a hosted version in [my domain](https://fsss.faustodeleon.work)already
+Currently the software supports being ran as a progressive web app, or simply by the browser; there is a hosted version in [my domain](https://fsss.faustodeleon.work) already
